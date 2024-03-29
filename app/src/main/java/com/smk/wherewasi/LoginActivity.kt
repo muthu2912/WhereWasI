@@ -52,6 +52,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun initObservers() {
         observerLoginResult()
+        observeSignupResult()
     }
 
     private fun observerLoginResult() {
@@ -64,6 +65,12 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun observeSignupResult(){
+        viewModel.signupResult.observe(this){result ->
+            Toast.makeText(this,result,Toast.LENGTH_SHORT)
         }
     }
 }
