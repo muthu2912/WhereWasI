@@ -38,15 +38,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setBtnListeners() {
-        val username = userEditText.text.toString()
-        val password = passEditText.text.toString()
-
         btnLogin.setOnClickListener {
-            viewModel.onLoginClicked(username, password)
+            viewModel.onLoginClicked(userEditText.text.toString(), passEditText.text.toString())
         }
 
         btnSignup.setOnClickListener {
-            viewModel.onSignupClicked(username, password)
+            viewModel.onSignupClicked(userEditText.text.toString(), passEditText.text.toString())
         }
     }
 
@@ -68,9 +65,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeSignupResult(){
-        viewModel.signupResult.observe(this){result ->
-            Toast.makeText(this,result,Toast.LENGTH_SHORT).show()
+    private fun observeSignupResult() {
+        viewModel.signupResult.observe(this) { result ->
+            Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
         }
     }
 }
