@@ -1,4 +1,4 @@
-package com.smk.wherewasi
+package view.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.smk.wherewasi.viewmodel.LoginViewModel
+import com.smk.wherewasi.R
+import model.MyRealm
+import viewmodel.LoginViewModel
 
 class LoginActivity : AppCompatActivity() {
 
@@ -19,6 +21,8 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        if (MyRealm.getLoggedInUser() != null) startMainActivity()
 
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
@@ -55,14 +59,18 @@ class LoginActivity : AppCompatActivity() {
     private fun observerLoginResult() {
         viewModel.loginResult.observe(this) { result ->
             if (result == "Success") {
-                val intent = Intent(this, MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                startActivity(intent)
-                finish()
+                startMainActivity()
             } else {
                 Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun startMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        finish()
     }
 
     private fun observeSignupResult() {

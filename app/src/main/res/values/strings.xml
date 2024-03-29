@@ -2,6 +2,17 @@
     <string name="app_name">Where was I</string>
     <string name="prompt_user">Enter Username</string>
     <string name="prompt_password">Enter Password</string>
+
     <string name="btn_txt_login">Login</string>
     <string name="btn_text_signup">Signup</string>
+
+    <string name="user_image_desc">User profile Image</string>
+
+    <string name="nav_title_places_visited">Placed Visited</string>
+    <string name="nav_logout">Logout</string>
+    <string name="nav_open_drawer">Open navigation drawer</string>string
+    <string name="nav_close_drawer">Close navigation drawer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="user_profile_image_desc">User Profile Image</string>
 </resources>

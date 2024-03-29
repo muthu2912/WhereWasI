@@ -1,4 +1,4 @@
-package com.smk.wherewasi.model
+package model
 
 import io.realm.kotlin.types.EmbeddedRealmObject
 

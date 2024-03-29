@@ -1,10 +1,11 @@
-package com.smk.wherewasi.viewmodel
+package viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.smk.wherewasi.MyRealm
-import com.smk.wherewasi.model.User
+import model.LoggedInUser
+import model.MyRealm
+import model.User
 import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.query.RealmResults
@@ -23,8 +24,11 @@ class LoginViewModel : ViewModel() {
         if (users.size == 0) {
             loginResult.value = "User does not exist"
         } else {
-            val res = if (users[0].password == password) "Success" else "Failed"
-            loginResult.value = res
+            if (users[0].password == password) {
+                setLoggedInUser(users[0]) //TODO clear the table and set logged in user
+                loginResult.value = "Success"
+            } else loginResult.value = "Failed"
+
         }
     }
 
@@ -42,6 +46,17 @@ class LoginViewModel : ViewModel() {
                 }
             }
             signupResult.value = "Signup Successfully"
+        }
+    }
+
+    private fun setLoggedInUser(currentUser: User) {
+        viewModelScope.launch(Dispatchers.IO) {
+            realm.write {
+                val loggedInUser = LoggedInUser().apply {
+                    user = currentUser
+                }
+                copyToRealm(loggedInUser, updatePolicy = UpdatePolicy.ALL)
+            }
         }
     }
 
