@@ -1,4 +1,4 @@
-package view.activity
+package com.smk.wherewasi.view.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,8 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.smk.wherewasi.R
-import model.MyRealm
-import viewmodel.LoginViewModel
+import com.smk.wherewasi.model.MyRealm
+import com.smk.wherewasi.viewmodel.LoginViewModel
 
 class LoginActivity : AppCompatActivity() {
 

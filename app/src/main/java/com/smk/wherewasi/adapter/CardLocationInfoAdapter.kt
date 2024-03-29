@@ -1,4 +1,4 @@
-package adapter
+package com.smk.wherewasi.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,31 +7,11 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.smk.wherewasi.R
-import io.realm.kotlin.ext.query
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import model.Location
-import model.MyRealm
+import com.smk.wherewasi.model.Location
 
 
-class CardLocationInfoAdapter(val listener: Listener) :
+class CardLocationInfoAdapter(private val listener: Listener, private val locationHistory: List<Location>):
     RecyclerView.Adapter<CardLocationInfoAdapter.ViewHolder>() {
-
-    private val realm = MyRealm.realm
-    private val locationHistory = realm
-        .query<Location>()
-        .asFlow()
-        .map { results ->
-            results.list.toList()
-        }
-        .stateIn(
-            MainScope(),
-            SharingStarted.WhileSubscribed(),
-            emptyList()
-        )
-
     interface Listener {
         fun onClick(position: Int)
     }
@@ -45,7 +25,7 @@ class CardLocationInfoAdapter(val listener: Listener) :
     }
 
     override fun getItemCount(): Int {
-        return locationHistory.value.size
+        return locationHistory.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -55,11 +35,14 @@ class CardLocationInfoAdapter(val listener: Listener) :
         val cardView: CardView = holder.itemView as CardView
         cardView.findViewById<ImageView>(R.id.info_loc_image)
             .setImageResource(R.drawable.image_loc_place_holder)
-        val latLng = "Lat: ${locationHistory.value[position].latitude}, Lon: ${locationHistory.value[position].latitude}"
-        cardView.findViewById<TextView>(R.id.info_loc_text).text = latLng
         cardView.setOnClickListener {
             listener.onClick(position)
         }
+        val latLng =
+            "Lat: ${locationHistory[position].latitude}, Lon: ${locationHistory[position].longitude} \n" +
+                    "@${locationHistory[position].time}"
+        cardView.findViewById<TextView>(R.id.info_loc_text).text = latLng
+
 
     }
 }

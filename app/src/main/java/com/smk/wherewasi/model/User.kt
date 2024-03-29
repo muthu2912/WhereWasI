@@ -1,4 +1,4 @@
-package model
+package com.smk.wherewasi.model
 
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey

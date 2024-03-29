@@ -1,4 +1,4 @@
-package model
+package com.smk.wherewasi.model
 
 import android.app.Application
 import io.realm.kotlin.Realm
@@ -28,6 +28,7 @@ class MyRealm : Application() {
         realm = Realm.open(
             configuration = RealmConfiguration.create(
                 schema = setOf(
+                    LoggedInUser::class,
                     Location::class,
                     User::class
                 )

@@ -2,8 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
-        android:name="model.MyRealm"
+        android:name=".model.MyRealm"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,8 +19,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WhereWasI"
         tools:targetApi="31">
+
+        <service
+            android:name=".service.LocationForegroundService"
+            android:foregroundServiceType="location" >
+        </service>
+
         <activity
-            android:name="view.activity.LoginActivity"
+            android:name=".view.activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +35,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="view.activity.MainActivity"
+            android:name=".view.activity.MainActivity"
             android:exported="false" />
     </application>
 
