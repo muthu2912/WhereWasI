@@ -70,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun observeSignupResult(){
         viewModel.signupResult.observe(this){result ->
-            Toast.makeText(this,result,Toast.LENGTH_SHORT)
+            Toast.makeText(this,result,Toast.LENGTH_SHORT).show()
         }
     }
 }
