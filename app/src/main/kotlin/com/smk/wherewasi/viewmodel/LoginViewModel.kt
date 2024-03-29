@@ -7,7 +7,6 @@ import com.smk.wherewasi.MyRealm
 import com.smk.wherewasi.model.User
 import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
-import io.realm.kotlin.query.RealmQuery
 import io.realm.kotlin.query.RealmResults
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
