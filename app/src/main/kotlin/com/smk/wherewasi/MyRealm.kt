@@ -1,7 +1,8 @@
 package com.smk.wherewasi
 
 import android.app.Application
-import com.smk.wherewasi.model.*
+import com.smk.wherewasi.model.Location
+import com.smk.wherewasi.model.User
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 
