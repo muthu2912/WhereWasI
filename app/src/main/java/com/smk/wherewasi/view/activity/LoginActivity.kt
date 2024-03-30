@@ -1,7 +1,9 @@
 package com.smk.wherewasi.view.activity
 
 import android.content.Intent
+import android.nfc.Tag
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -23,14 +25,15 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         if (MyRealm.getLoggedInUser() != null) startMainActivity()
-
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
         initViews()
 
         setBtnListeners()
 
+
         initObservers()
+
 
     }
 
@@ -77,5 +80,9 @@ class LoginActivity : AppCompatActivity() {
         viewModel.signupResult.observe(this) { result ->
             Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    companion object {
+        private const val TAG = "Login Activity"
     }
 }

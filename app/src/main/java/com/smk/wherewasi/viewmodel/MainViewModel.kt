@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.smk.wherewasi.model.MyRealm
 
 class MainViewModel: ViewModel() {
-    //private val realm = MyRealm.realm
     val loggedInUser = MutableLiveData<String>()
 
     init {
