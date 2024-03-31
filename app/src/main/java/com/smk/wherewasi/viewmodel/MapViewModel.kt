@@ -1,6 +1,5 @@
 package com.smk.wherewasi.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
 import com.smk.wherewasi.model.Location

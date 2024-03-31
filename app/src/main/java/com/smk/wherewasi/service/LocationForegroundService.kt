@@ -24,10 +24,7 @@ import com.smk.wherewasi.R
 import com.smk.wherewasi.model.Location
 import com.smk.wherewasi.model.MyRealm
 import com.smk.wherewasi.model.MyRealm.Companion.realm
-import com.smk.wherewasi.model.User
 import io.realm.kotlin.UpdatePolicy
-import io.realm.kotlin.ext.query
-import io.realm.kotlin.query.RealmResults
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId

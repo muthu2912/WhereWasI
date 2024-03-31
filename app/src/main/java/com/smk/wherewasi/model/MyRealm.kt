@@ -1,16 +1,9 @@
 package com.smk.wherewasi.model
 
 import android.app.Application
-import android.util.Log
-import androidx.lifecycle.viewModelScope
-import com.smk.wherewasi.model.MyRealm.Companion.realm
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
-import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
-import io.realm.kotlin.query.RealmResults
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MyRealm : Application() {
     companion object {

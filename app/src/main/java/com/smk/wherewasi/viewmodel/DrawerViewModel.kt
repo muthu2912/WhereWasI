@@ -1,22 +1,15 @@
 package com.smk.wherewasi.viewmodel
 
-import android.graphics.Color
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mikepenz.materialdrawer.holder.BadgeStyle
-import com.mikepenz.materialdrawer.holder.ColorHolder
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
-import com.mikepenz.materialdrawer.model.interfaces.badgeText
 import com.mikepenz.materialdrawer.model.interfaces.descriptionText
 import com.mikepenz.materialdrawer.model.interfaces.iconRes
 import com.mikepenz.materialdrawer.model.interfaces.nameText
 import com.smk.wherewasi.R
 import com.smk.wherewasi.model.LoggedInUser
 import com.smk.wherewasi.model.MyRealm
-import com.smk.wherewasi.model.MyRealm.Companion.realm
 import com.smk.wherewasi.model.User
 import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
