@@ -1,6 +1,7 @@
 package com.smk.wherewasi.model
 
 import android.app.Application
+import android.util.Log
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.query
@@ -15,12 +16,12 @@ class MyRealm : Application() {
         }
 
         fun removeCurrentUser() {
+            Log.d("MyRealm","removeCurrentUser")
             realm.writeBlocking {
                 val currentUser = query<CurrentUser>().find()
-                delete(currentUser.first())
+                if(currentUser.size!=0) delete(currentUser.first()) //Only clearing if contains record, otherwise getting error :(
             }
         }
-
     }
 
     override fun onCreate() {
