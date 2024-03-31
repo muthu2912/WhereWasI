@@ -54,7 +54,7 @@ class LocationForegroundService : Service() {
                         val currentLocationData = Location().apply {
                             val current = LocalDateTime.now()
                             val date = Date.from(current.atZone(ZoneId.systemDefault()).toInstant())
-                            val formatter = SimpleDateFormat.getDateTimeInstance() //TODO
+                            val formatter = SimpleDateFormat.getDateTimeInstance()
                             val formattedTime = formatter.format(date)
 
                             currentUser = MyRealm.getCurrentUser().toString()
@@ -72,7 +72,6 @@ class LocationForegroundService : Service() {
                         )
                     }
                 }
-                //debug() //TODO: remove this
             }
         }
     }
@@ -139,7 +138,7 @@ class LocationForegroundService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
     override fun onDestroy() {
         super.onDestroy()
-        stopForeground(STOP_FOREGROUND_REMOVE) //TODO
+        stopForeground(STOP_FOREGROUND_REMOVE)
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
@@ -147,6 +146,6 @@ class LocationForegroundService : Service() {
         private const val FOREGROUND_SERVICE_ID = 101
         private const val CHANNEL_ID = "LocationForegroundServiceChannel"
         private const val ACTION_STOP_FOREGROUND_SERVICE = "stopForegroundService"
-        private const val DEFAULT_LOCATION_UPDATE_INTERVAL = 15 * 60 * 1000L
+        private const val DEFAULT_LOCATION_UPDATE_INTERVAL = 5000L
     }
 }

@@ -12,8 +12,7 @@
     <string name="nav_logout">Logout</string>
     <string name="nav_open_drawer">Open navigation drawer</string>string
     <string name="nav_close_drawer">Close navigation drawer</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="user_profile_image_desc">User Profile Image</string>
     <string name="btn_text_map_play">Play</string>
     <string name="btn_text_map_stop">Stop</string>
