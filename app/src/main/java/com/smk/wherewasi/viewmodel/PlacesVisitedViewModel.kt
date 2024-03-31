@@ -1,3 +1,5 @@
+package com.smk.wherewasi.viewmodel
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,7 +19,7 @@ class PlacesVisitedViewModel : ViewModel() {
     val locationHistory: LiveData<List<Location>> = _locationHistory
 
     private val locationData = realm
-        .query<Location>("user=$0", MyRealm.getLoggedInUser())
+        .query<Location>("user=$0", MyRealm.getCurrentUser())
         .asFlow()
         .map { results -> results.list.toList().reversed() }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
@@ -25,7 +27,7 @@ class PlacesVisitedViewModel : ViewModel() {
     init {
         viewModelScope.launch(Dispatchers.IO) {
             locationData.collect { locations ->
-                // Use postValue to update LiveData on the main thread
+                // Using postValue to update LiveData on the main thread
                 _locationHistory.postValue(locations)
             }
         }

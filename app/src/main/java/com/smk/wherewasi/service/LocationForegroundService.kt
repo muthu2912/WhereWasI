@@ -56,7 +56,7 @@ class LocationForegroundService : Service() {
                             val formatter = SimpleDateFormat.getDateTimeInstance() //TODO
                             val formattedTime = formatter.format(date)
 
-                            currentUser = MyRealm.getLoggedInUser().toString()
+                            currentUser = MyRealm.getCurrentUser().toString()
                             user = currentUser
                             //Making change to locations to simulate movement
                             longitude = location.longitude + Math.random() * 0.001

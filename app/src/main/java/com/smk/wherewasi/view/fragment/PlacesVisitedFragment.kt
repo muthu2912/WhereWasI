@@ -1,6 +1,5 @@
 package com.smk.wherewasi.view.fragment
 
-import PlacesVisitedViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.smk.wherewasi.R
 import com.smk.wherewasi.adapter.CardLocationInfoAdapter
+import com.smk.wherewasi.viewmodel.PlacesVisitedViewModel
 
 
 class PlacesVisitedFragment : Fragment() {
@@ -22,9 +22,11 @@ class PlacesVisitedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         viewModel = ViewModelProvider(this)[PlacesVisitedViewModel::class.java]
+
         val locHistoryRecycler =
             inflater.inflate(R.layout.fragment_places_visited,container,false) as RecyclerView
         locHistoryRecycler.layoutManager = GridLayoutManager(activity,1)
+
         val listener = object  : CardLocationInfoAdapter.Listener{
             override fun onClick(position: Int) {
 
@@ -36,10 +38,10 @@ class PlacesVisitedFragment : Fragment() {
             }
 
         }
+
         viewModel.locationHistory.observe(viewLifecycleOwner){locations ->
             locHistoryRecycler.adapter = CardLocationInfoAdapter(listener,locations)
         }
-
 
         return locHistoryRecycler
     }

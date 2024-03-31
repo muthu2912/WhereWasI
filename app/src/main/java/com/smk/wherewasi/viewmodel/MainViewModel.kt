@@ -11,6 +11,6 @@ class MainViewModel: ViewModel() {
         getUserProfile()
     }
     private fun getUserProfile(){
-         loggedInUser.value= MyRealm.getLoggedInUser()
+         loggedInUser.value= MyRealm.getCurrentUser()
     }
 }

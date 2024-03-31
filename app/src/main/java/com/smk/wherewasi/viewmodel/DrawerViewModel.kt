@@ -8,7 +8,7 @@ import com.mikepenz.materialdrawer.model.interfaces.descriptionText
 import com.mikepenz.materialdrawer.model.interfaces.iconRes
 import com.mikepenz.materialdrawer.model.interfaces.nameText
 import com.smk.wherewasi.R
-import com.smk.wherewasi.model.LoggedInUser
+import com.smk.wherewasi.model.CurrentUser
 import com.smk.wherewasi.model.MyRealm
 import com.smk.wherewasi.model.User
 import io.realm.kotlin.UpdatePolicy
@@ -28,7 +28,7 @@ class DrawerViewModel : ViewModel() {
     }
     private fun setProfiles() {
         val profiles = mutableListOf<IProfile>()
-        val loggedInUser = MyRealm.getLoggedInUser()
+        val loggedInUser = MyRealm.getCurrentUser()
         for (i in registeredUsers.indices) {
             val uname = registeredUsers[i].userName
             if (loggedInUser.equals(uname)) currentUserIndex = i.toLong()
@@ -45,13 +45,13 @@ class DrawerViewModel : ViewModel() {
         registeredUsers =  realm.query<User>().find()
     }
 
-    fun setLoggedInUser(currentUserIdentifier: Int) {
+    fun setCurrentUser(currentUserIdentifier: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             MyRealm.realm.write {
-                val loggedInUser = LoggedInUser().apply {
+                val currentUser = CurrentUser().apply {
                     user = registeredUsers[currentUserIdentifier].userName
                 }
-                copyToRealm(loggedInUser, updatePolicy = UpdatePolicy.ALL)
+                copyToRealm(currentUser, updatePolicy = UpdatePolicy.ALL)
             }
         }
     }

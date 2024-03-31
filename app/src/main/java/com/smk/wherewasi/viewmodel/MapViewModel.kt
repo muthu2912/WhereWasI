@@ -21,7 +21,7 @@ class MapViewModel : ViewModel() {
 
     fun updateLocationHistory() {
         locationHistory = realm.query<Location>(
-            "user=$0", MyRealm.getLoggedInUser()
-        ).find().reversed()
+            "user=$0", MyRealm.getCurrentUser()
+        ).find().reversed()  //reverser to  play from last captured location
     }
 }

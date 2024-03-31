@@ -38,52 +38,17 @@ class DrawerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_drawer)
+
         viewModel = ViewModelProvider(this)[DrawerViewModel::class.java]
+
         initDrawerViews()
         initDrawerItems(savedInstanceState)
         initDrawerHeader(savedInstanceState)
+
         getPermissions()
+
         setDefaultFragment()
     }
-
-//    private fun getPermissions() {
-//        if (ContextCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            // Request location permissions
-//            ActivityCompat.requestPermissions(
-//                this,
-//                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-//                LOCATION_PERMISSION_REQUEST_CODE
-//            )
-//        } else {
-//            startLocationService()
-//        }
-//    }
-//
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                // Location permissions granted
-//                Toast.makeText(this, "Granted", Toast.LENGTH_SHORT).show()
-//                startLocationService()
-//            } else {
-//                // Location permissions denied
-//                Toast.makeText(
-//                    this,
-//                    "Location permission required to access location updates",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//        }
-//    }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun getPermissions() {
@@ -172,11 +137,6 @@ class DrawerActivity : AppCompatActivity() {
         finish()
     }
 
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        actionBarDrawerToggle.syncState()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         stopService(serviceIntent)
@@ -185,9 +145,11 @@ class DrawerActivity : AppCompatActivity() {
     private fun initDrawerViews() {
         slider = findViewById(R.id.slider)
         toolbar = findViewById(R.id.toolbar)
+
         setSupportActionBar(toolbar)
         supportActionBar?.title = getString(R.string.app_name)
         supportActionBar?.setHomeButtonEnabled(true)
+
         actionBarDrawerToggle = ActionBarDrawerToggle(
             this,
             findViewById(R.id.root),
@@ -195,7 +157,8 @@ class DrawerActivity : AppCompatActivity() {
             com.mikepenz.materialdrawer.R.string.material_drawer_open,
             com.mikepenz.materialdrawer.R.string.material_drawer_close
         )
-        // actionBarDrawerToggle.syncState()
+
+        actionBarDrawerToggle.syncState()
     }
 
     private fun initDrawerHeader(savedInstanceState: Bundle?) {
@@ -210,8 +173,8 @@ class DrawerActivity : AppCompatActivity() {
             withSavedInstance(savedInstanceState)
             onAccountHeaderListener = { _, profile, _ ->
                 profile.identifier
-                MyRealm.deleteLoggedInUser()
-                viewModel.setLoggedInUser(profile.identifier.toInt())
+                MyRealm.removeCurrentUser()
+                viewModel.setCurrentUser(profile.identifier.toInt())
                 setDefaultFragment()
                 Log.d("Drawer Activity", "${profile.name}")
                 false
@@ -233,7 +196,7 @@ class DrawerActivity : AppCompatActivity() {
             )
             onDrawerItemClickListener = { _, drawerItem, _ ->
                 if (drawerItem.identifier == 1L) {
-                    MyRealm.deleteLoggedInUser()
+                    MyRealm.removeCurrentUser()
                     startLoginActivity()
                 }
                 false

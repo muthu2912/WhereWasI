@@ -89,6 +89,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 map.clear()
                 val marker = MarkerOptions().position(nextLatLng)
                 marker.title(viewModel.currentLocInfo)
+
                 map.addMarker(marker)
                 map.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(nextLatLng, DEFAULT_ZOOM),
@@ -104,11 +105,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             }
                         }
                         override fun onCancel() {
-                            // Handle cancellation if needed
+                            // Handle cancellation, not needed for now.
                         }
                     })
             }else{
-                stopPlayback()
+                stopPlayback("Completed")
             }
         }
         animateNext()
@@ -123,7 +124,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             if (playButton.text == resources.getString(R.string.btn_text_map_play)) {
                 startPlayback()
             } else {
-                stopPlayback()
+                stopPlayback("Stopped")
             }
         }
     }
@@ -136,10 +137,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Toast.makeText(context, "Playback started", Toast.LENGTH_SHORT).show()
     }
 
-    private fun stopPlayback(){
+    private fun stopPlayback(status: String){   //getting status, completed or stopped by user
         playButton.text = resources.getString(R.string.btn_text_map_play)
         viewModel.isPlayingHistory = false
-        Toast.makeText(context, "Playback stopped", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Playback $status", Toast.LENGTH_SHORT).show()
     }
 
 

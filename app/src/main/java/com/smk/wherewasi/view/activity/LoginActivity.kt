@@ -22,7 +22,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        if (MyRealm.getLoggedInUser() != null) startDrawerActivity()
+        //Checking previously logged in user.
+        if (MyRealm.getCurrentUser() != null) startDrawerActivity()
 
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 

@@ -19,18 +19,14 @@ class CustomMapInfoAdapter(context: Context) : GoogleMap.InfoWindowAdapter {
         val titleTextView = view.findViewById<TextView>(R.id.title_text)
         val snippetTextView = view.findViewById<TextView>(R.id.snippet_text)
 
-        // Retrieve information from marker (replace with your data source)
         val title = marker.title
         val snippet = marker.snippet
-
         titleTextView.text = title
         snippetTextView.text = snippet
-
         return view
     }
 
     override fun getInfoContents(marker: Marker): View? {
-        // Returning null here indicates the custom info window from getInfoWindow is used
         return null
     }
 }
