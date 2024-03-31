@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="#80868B"
+    card_view:cardCornerRadius="10dp"
+    card_view:cardElevation="6dp"
     android:padding="16dp">
 
     <TextView
@@ -11,12 +14,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textStyle="bold" />
+        android:padding="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
     <TextView
         android:id="@+id/snippet_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp" />
-</LinearLayout>
+</androidx.cardview.widget.CardView>

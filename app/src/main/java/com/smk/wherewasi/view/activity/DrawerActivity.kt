@@ -4,9 +4,11 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -32,6 +34,7 @@ class DrawerActivity : AppCompatActivity() {
     private lateinit var headerView: AccountHeaderView
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var serviceIntent: Intent
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_drawer)
@@ -43,44 +46,111 @@ class DrawerActivity : AppCompatActivity() {
         setDefaultFragment()
     }
 
+//    private fun getPermissions() {
+//        if (ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            // Request location permissions
+//            ActivityCompat.requestPermissions(
+//                this,
+//                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+//                LOCATION_PERMISSION_REQUEST_CODE
+//            )
+//        } else {
+//            startLocationService()
+//        }
+//    }
+//
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                // Location permissions granted
+//                Toast.makeText(this, "Granted", Toast.LENGTH_SHORT).show()
+//                startLocationService()
+//            } else {
+//                // Location permissions denied
+//                Toast.makeText(
+//                    this,
+//                    "Location permission required to access location updates",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//        }
+//    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun getPermissions() {
+        val permissionsToRequest = mutableListOf<String>()
+
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // Request location permissions
+            permissionsToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
+                permissionsToRequest.toTypedArray(),
+                if (permissionsToRequest.contains(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    LOCATION_PERMISSION_REQUEST_CODE
+                } else {
+                    NOTIFICATION_PERMISSION_REQUEST_CODE
+                }
             )
         } else {
-            startLocationService()
+            startLocationService() // If both permissions are already granted, proceed
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Location permissions granted
-                Toast.makeText(this, "Granted", Toast.LENGTH_SHORT).show()
-                startLocationService()
-            } else {
-                // Location permissions denied
-                Toast.makeText(
-                    this,
-                    "Location permission required to access location updates",
-                    Toast.LENGTH_SHORT
-                ).show()
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Location permission granted
+                    Toast.makeText(this, "Location permission granted", Toast.LENGTH_SHORT).show()
+                    getPermissions() // Check for notification permission
+                } else {
+                    // Location permission denied
+                    Toast.makeText(this, "Location permission required", Toast.LENGTH_SHORT).show()
+                }
+            }
+            NOTIFICATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Notification permission granted
+                    Toast.makeText(this, "Notification permission granted", Toast.LENGTH_SHORT).show()
+                    startLocationService()
+                } else {
+                    // Notification permission denied
+                    Toast.makeText(this, "Notification permission required", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
+
 
     private fun startLocationService() {
         serviceIntent = Intent(this, LocationForegroundService::class.java)
@@ -173,6 +243,7 @@ class DrawerActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 102
         private const val LOCATION_PERMISSION_REQUEST_CODE = 103
     }
 }
