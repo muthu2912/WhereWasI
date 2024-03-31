@@ -17,9 +17,9 @@ class PlacesVisitedViewModel : ViewModel() {
     val locationHistory: LiveData<List<Location>> = _locationHistory
 
     private val locationData = realm
-        .query<Location>("user=$0", "muthu")
+        .query<Location>("user=$0", MyRealm.getLoggedInUser())
         .asFlow()
-        .map { results -> results.list.toList() }
+        .map { results -> results.list.toList().reversed() }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     init {

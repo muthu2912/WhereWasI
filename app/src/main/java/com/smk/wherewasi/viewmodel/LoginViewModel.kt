@@ -51,7 +51,7 @@ class LoginViewModel : ViewModel() {
 
     private fun setLoggedInUser(currentUser: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            realm.write {
+            MyRealm.realm.write {
                 val loggedInUser = LoggedInUser().apply {
                     user = currentUser
                 }

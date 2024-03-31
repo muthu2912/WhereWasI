@@ -33,38 +33,43 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
 
-class LocationForegroundService: Service() {
+class LocationForegroundService : Service() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
-    private val real = MyRealm.realm
-    private lateinit var currentUser : User
+    private val real = realm
+    private lateinit var currentUser: String
 
     override fun onCreate() {
         super.onCreate()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        locationRequest = LocationRequest.Builder( LocationRequest.PRIORITY_HIGH_ACCURACY,5000).build()
-        locationCallback = object : LocationCallback(){
+        locationRequest =
+            LocationRequest.Builder(LocationRequest.PRIORITY_HIGH_ACCURACY, 5000).build()
+        locationCallback = object : LocationCallback() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
-                for(location in locationResult.locations){
+                for (location in locationResult.locations) {
                     real.writeBlocking {
-                        val currentLocationData= Location().apply {
+                        val currentLocationData = Location().apply {
                             val current = LocalDateTime.now()
                             val date = Date.from(current.atZone(ZoneId.systemDefault()).toInstant())
                             val formatter = SimpleDateFormat("h:mm a")
                             val formattedTime = formatter.format(date)
-                            currentUser = MyRealm.getLoggedInUser()!!
-                            user = currentUser.userName
-                            longitude = location.longitude
-                            latitude = location.latitude
+                            currentUser = MyRealm.getLoggedInUser().toString()
+                            user = currentUser
+                            //Making change to locations to simulate movement
+                            longitude = location.longitude + Math.random() * 0.001
+                            latitude = location.latitude + Math.random() * 0.001
                             time = formattedTime
-                            Log.d("Location Data","$user | $latitude | $longitude | $time")
+                            Log.d("Location Data", "$user | $latitude | $longitude | $time")
                         }
                         copyToRealm(currentLocationData, updatePolicy = UpdatePolicy.ALL)
-                        Log.d("Services: Location updated","${location.latitude} | ${location.longitude}")
+                        Log.d(
+                            "Services: Location updated",
+                            "${location.latitude} | ${location.longitude}"
+                        )
                     }
                 }
                 //debug() //TODO: remove this
@@ -105,7 +110,8 @@ class LocationForegroundService: Service() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotification(): Notification {
-        val notificationManager = getSystemService(NotificationManager::class.java) as NotificationManager
+        val notificationManager =
+            getSystemService(NotificationManager::class.java) as NotificationManager
         val importance = NotificationManager.IMPORTANCE_LOW
         val channel = NotificationChannel(CHANNEL_ID, "Location Updates", importance).apply {
             lockscreenVisibility = Notification.VISIBILITY_PRIVATE
@@ -116,8 +122,10 @@ class LocationForegroundService: Service() {
             action = ACTION_STOP_FOREGROUND_SERVICE
         }
         val stopPendingIntent: PendingIntent =
-            PendingIntent.getService(this, 0, stopIntent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT)
+            PendingIntent.getService(
+                this, 0, stopIntent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+            )
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Location Updates")
             .setContentText("Getting location updates every 15 minutes")
@@ -135,14 +143,6 @@ class LocationForegroundService: Service() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-    private fun debug(){
-        val locations: RealmResults<Location> = realm.query<Location>(
-            "user=$0", "muthu"
-        ).find()
-        for(loc in locations){
-            Log.d("debug loc",loc.latitude.toString())
-        }
-    }
     companion object {
         private const val FOREGROUND_SERVICE_ID = 101
         private const val CHANNEL_ID = "LocationForegroundServiceChannel"

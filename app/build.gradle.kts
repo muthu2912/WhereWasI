@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.play.services.location)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -52,4 +53,6 @@ dependencies {
     implementation (libs.library.sync)
     implementation (libs.kotlinx.coroutines.core)
     implementation (libs.androidx.lifecycle.runtime.ktx)
+    implementation("com.mikepenz:materialdrawer:9.0.1")
+    implementation ("com.google.android.material:material:1.11.0")
 }

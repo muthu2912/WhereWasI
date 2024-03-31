@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -28,8 +27,12 @@ class PlacesVisitedFragment : Fragment() {
         locHistoryRecycler.layoutManager = GridLayoutManager(activity,1)
         val listener = object  : CardLocationInfoAdapter.Listener{
             override fun onClick(position: Int) {
-                Toast.makeText(context, "Item clicked at position: $position", Toast.LENGTH_SHORT)
-                    .show()
+
+                val mapFragment = MapFragment.newInstance(viewModel.locationHistory.value!![position])
+                val transaction = parentFragmentManager.beginTransaction()
+                transaction.replace(R.id.frame_container, mapFragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
             }
 
         }

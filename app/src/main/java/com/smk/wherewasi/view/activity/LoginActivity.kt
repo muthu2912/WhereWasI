@@ -1,9 +1,7 @@
 package com.smk.wherewasi.view.activity
 
 import android.content.Intent
-import android.nfc.Tag
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -24,13 +22,13 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        if (MyRealm.getLoggedInUser() != null) startMainActivity()
+        //if (MyRealm.getLoggedInUser() != null) startMainActivity()
+        if (MyRealm.getLoggedInUser() != null) startDrawerActivity()
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
         initViews()
 
         setBtnListeners()
-
 
         initObservers()
 
@@ -62,15 +60,23 @@ class LoginActivity : AppCompatActivity() {
     private fun observerLoginResult() {
         viewModel.loginResult.observe(this) { result ->
             if (result == "Success") {
-                startMainActivity()
+                //startMainActivity()
+                startDrawerActivity()
             } else {
                 Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun startMainActivity() {
+    private fun startMainActivity() { //TODO: remove MainActivity
         val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun startDrawerActivity() {
+        val intent = Intent(this, DrawerActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
         finish()

@@ -1,18 +1,24 @@
 package com.smk.wherewasi.model
 
 import android.app.Application
+import android.util.Log
+import androidx.lifecycle.viewModelScope
+import com.smk.wherewasi.model.MyRealm.Companion.realm
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.query.RealmResults
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MyRealm : Application() {
     companion object {
         lateinit var realm: Realm
 
-        fun getLoggedInUser(): User? {
-            val user: RealmResults<User> = realm.query<User>().find()
-            return if (user.size == 0) null else user[0]
+        fun getLoggedInUser(): String? {
+            val currentUser = realm.query<LoggedInUser>().find()
+            return if(currentUser.size!=0) currentUser[0].user else null
         }
 
         fun deleteLoggedInUser() {
@@ -21,6 +27,7 @@ class MyRealm : Application() {
                 delete(loggedInUser.first())
             }
         }
+
     }
 
     override fun onCreate() {

@@ -40,7 +40,7 @@ class CardLocationInfoAdapter(private val listener: Listener, private val locati
         }
         val latLng =
             "Lat: ${locationHistory[position].latitude}, Lon: ${locationHistory[position].longitude} \n" +
-                    "@${locationHistory[position].time}"
+                    "@${locationHistory[position].time} | ${locationHistory[position].user}"
         cardView.findViewById<TextView>(R.id.info_loc_text).text = latLng
 
 

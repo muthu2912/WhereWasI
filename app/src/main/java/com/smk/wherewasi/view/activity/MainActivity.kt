@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
@@ -16,10 +17,10 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
-import com.smk.wherewasi.R
 import com.smk.wherewasi.service.LocationForegroundService
 import com.smk.wherewasi.view.fragment.PlacesVisitedFragment
 import com.smk.wherewasi.viewmodel.MainViewModel
+
 
 class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
 
@@ -29,41 +30,51 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
     private lateinit var currentUserTextView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(com.smk.wherewasi.R.layout.activity_main)
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        setSupportActionBar(findViewById(R.id.toolbar))
+        setSupportActionBar(findViewById(com.smk.wherewasi.R.id.toolbar))
         setNavigationDrawer()
-        //initViews()
-        //setCurrentUserProfile()
-        setObservers()
         getPermissions()
         setDefaultFragment()
 
     }
 
     private fun setNavigationDrawer() {
-        navigationView = findViewById(R.id.nav_view)
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        navigationView = findViewById(com.smk.wherewasi.R.id.nav_view)
+        val drawer = findViewById<DrawerLayout>(com.smk.wherewasi.R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(
             this,
             drawer,
-            findViewById(R.id.toolbar),
-            R.string.nav_open_drawer,
-            R.string.nav_close_drawer
+            findViewById(com.smk.wherewasi.R.id.toolbar),
+            com.smk.wherewasi.R.string.nav_open_drawer,
+            com.smk.wherewasi.R.string.nav_close_drawer
         )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
         navigationView.setNavigationItemSelectedListener(this)
     }
 
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        initViews()
+        setCurrentUserProfile()
+        setObservers()
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-        if (menuItem.itemId == R.id.nav_places_visited) {
+        if (menuItem.itemId == com.smk.wherewasi.R.id.nav_places_visited) {
             setDefaultFragment()
         }
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
+        val drawer = findViewById<DrawerLayout>(com.smk.wherewasi.R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onDestroy() {
+        stopService(serviceIntent)
+        super.onDestroy()
     }
 
     private fun setCurrentUserProfile() {
@@ -77,7 +88,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
     private fun observeCurrentUser() {
         viewModel.loggedInUser.observe(this) { result ->
             if (result != null) {
-                //currentUserTextView.text = result
+                currentUserTextView.text = result
             }
         }
     }
@@ -85,7 +96,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
     private fun setDefaultFragment() {
         val fragment = PlacesVisitedFragment()
         supportFragmentManager.beginTransaction()
-            .replace(R.id.content_frame, fragment)
+            .replace(com.smk.wherewasi.R.id.content_frame, fragment)
             .commit()
     }
     private fun startLocationService() {
@@ -128,7 +139,7 @@ class MainActivity : AppCompatActivity(), OnNavigationItemSelectedListener {
     }
 
     private fun initViews(){
-        currentUserTextView = findViewById(R.id.user_name)
+        currentUserTextView = findViewById(com.smk.wherewasi.R.id.user_name)
     }
     companion object{
         private const val LOCATION_PERMISSION_REQUEST_CODE = 103
