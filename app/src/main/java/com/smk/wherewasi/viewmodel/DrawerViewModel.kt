@@ -29,7 +29,7 @@ class DrawerViewModel : ViewModel() {
             val profile = ProfileDrawerItem().apply {
                 val uname = registeredUsers[i].userName
                 nameText = uname; descriptionText =
-                "$uname@gmail.com"; iconRes = R.drawable.profile; identifier = i.toLong();
+                "$uname@gmail.com"; iconRes = R.drawable.profile; identifier = i.toLong()
             }
             profiles.add(profile)
         }

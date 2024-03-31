@@ -20,6 +20,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.smk.wherewasi.R
 import com.smk.wherewasi.model.Location
 import com.smk.wherewasi.model.MyRealm
@@ -42,7 +43,7 @@ class LocationForegroundService : Service() {
         super.onCreate()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest =
-            LocationRequest.Builder(LocationRequest.PRIORITY_HIGH_ACCURACY, 5000).build()
+            LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000).build()
         locationCallback = object : LocationCallback() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onLocationResult(locationResult: LocationResult) {
@@ -52,8 +53,9 @@ class LocationForegroundService : Service() {
                         val currentLocationData = Location().apply {
                             val current = LocalDateTime.now()
                             val date = Date.from(current.atZone(ZoneId.systemDefault()).toInstant())
-                            val formatter = SimpleDateFormat("h:mm a")
+                            val formatter = SimpleDateFormat.getDateTimeInstance() //TODO
                             val formattedTime = formatter.format(date)
+
                             currentUser = MyRealm.getLoggedInUser().toString()
                             user = currentUser
                             //Making change to locations to simulate movement
@@ -136,7 +138,7 @@ class LocationForegroundService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
     override fun onDestroy() {
         super.onDestroy()
-        stopForeground(true)
+        stopForeground(STOP_FOREGROUND_REMOVE) //TODO
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 

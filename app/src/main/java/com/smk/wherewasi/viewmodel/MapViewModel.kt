@@ -12,7 +12,7 @@ class MapViewModel : ViewModel() {
     lateinit var locationHistory: List<Location>
     lateinit var currentLatLng: LatLng
     var currentLocInfo = ""
-    var isPlayingHistory = false;
+    var isPlayingHistory = false
 
     init {
         updateLocationHistory()
