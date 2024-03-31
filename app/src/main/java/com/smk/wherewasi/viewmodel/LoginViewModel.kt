@@ -21,7 +21,7 @@ class LoginViewModel : ViewModel() {
         val users: RealmResults<User> = realm.query<User>(
             "userName=$0", username
         ).find()
-        if (users.size == 0) {
+        if (users.isEmpty()) {
             loginResult.value = "User does not exist"
         } else {
             if (users[0].password == password) {
@@ -34,7 +34,7 @@ class LoginViewModel : ViewModel() {
     }
 
     fun onSignupClicked(uname: String, pass: String) {
-        if (getUserCount() > 3) {
+        if (getUserCount() >= 5) {
             signupResult.value = "User limit exceeds"
         } else {
             viewModelScope.launch(Dispatchers.IO) {

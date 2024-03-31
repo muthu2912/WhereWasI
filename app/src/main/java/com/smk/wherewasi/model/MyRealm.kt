@@ -12,14 +12,14 @@ class MyRealm : Application() {
 
         fun getCurrentUser(): String? {
             val currentUser = realm.query<CurrentUser>().find()
-            return if(currentUser.size!=0) currentUser[0].user else null
+            return if(!currentUser.isEmpty()) currentUser[0].user else null
         }
 
         fun removeCurrentUser() {
             Log.d("MyRealm","removeCurrentUser")
             realm.writeBlocking {
                 val currentUser = query<CurrentUser>().find()
-                if(currentUser.size!=0) delete(currentUser.first()) //Only clearing if contains record, otherwise getting error :(
+                if(!currentUser.isEmpty()) delete(currentUser.first()) //Only clearing if contains record, otherwise getting error :(
             }
         }
     }

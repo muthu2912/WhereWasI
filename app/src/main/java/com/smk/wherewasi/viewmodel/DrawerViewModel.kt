@@ -34,7 +34,7 @@ class DrawerViewModel : ViewModel() {
             if (loggedInUser.equals(uname)) currentUserIndex = i.toLong()
             val profile = ProfileDrawerItem().apply {
                 nameText = uname; descriptionText =
-                "$uname@gmail.com"; iconRes = R.drawable.profile; identifier = i.toLong()
+                "$uname@gmail.com"; iconRes = getDummyProfileIcon(i); identifier = i.toLong()
             }
             profiles.add(profile)
         }
@@ -52,6 +52,18 @@ class DrawerViewModel : ViewModel() {
                     user = registeredUsers[currentUserIdentifier].userName
                 }
                 copyToRealm(currentUser, updatePolicy = UpdatePolicy.ALL)
+            }
+        }
+    }
+
+    companion object{
+        fun getDummyProfileIcon(id: Int):Int{
+            return when(id){
+                0 -> R.drawable.ic_avatar_1
+                1 -> R.drawable.ic_avatar_2
+                2 -> R.drawable.ic_avatar_3
+                3 -> R.drawable.ic_avatar_4
+                else ->R.drawable.ic_avatar_5
             }
         }
     }
