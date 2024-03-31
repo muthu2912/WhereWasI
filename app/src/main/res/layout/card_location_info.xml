@@ -3,10 +3,10 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="wrap_content"
     android:layout_margin="6dp"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="2dp">
+    card_view:cardCornerRadius="10dp"
+    card_view:cardElevation="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,17 +16,47 @@
         <ImageView
             android:id="@+id/info_loc_image"
             android:layout_width="100dp"
-            android:layout_margin="4dp"
             android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:contentDescription="@string/user_profile_image_desc" />
+            android:layout_margin="4dp"
+            android:contentDescription="@string/user_profile_image_desc"
+            android:scaleType="fitCenter" />
 
-        <TextView
-            android:id="@+id/info_loc_text"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textSize="16sp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/info_loc_user_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/info_loc_lat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/info_loc_lon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/info_loc_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

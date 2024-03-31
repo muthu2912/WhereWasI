@@ -42,8 +42,8 @@ class LocationForegroundService : Service() {
     override fun onCreate() {
         super.onCreate()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        locationRequest =
-            LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000).build()
+        locationRequest =LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY,15 * 60 * 1000).build()
+            //LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000).build()
         locationCallback = object : LocationCallback() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onLocationResult(locationResult: LocationResult) {

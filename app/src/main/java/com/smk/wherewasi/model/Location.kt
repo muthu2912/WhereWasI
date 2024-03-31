@@ -6,5 +6,5 @@ class Location : RealmObject {
     var latitude: Double = 0.0
     var longitude: Double = 0.0
     var time: String = ""
-    var user: String = "" //Todo: implement user id to reduce storage
+    var user: String = "" //Todo: use user id instead of name
 }

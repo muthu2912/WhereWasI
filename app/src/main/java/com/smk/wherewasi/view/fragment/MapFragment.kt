@@ -18,6 +18,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.smk.wherewasi.R
+import com.smk.wherewasi.adapter.CustomMapInfoAdapter
 import com.smk.wherewasi.model.Location
 import com.smk.wherewasi.viewmodel.MapViewModel
 
@@ -33,7 +34,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         viewModel = ViewModelProvider(this)[MapViewModel::class.java]
         arguments?.let {
             viewModel.currentLatLng = LatLng(it.getDouble("lat"), it.getDouble("lon"))
-            viewModel.currentLocInfo = "${it.getString("user")} At ${it.getString("infoTime")}"
+            viewModel.currentLocInfo = "${it.getString("user")},\nYou were here on\n ${it.getString("infoTime")}"
         }
     }
 
@@ -59,6 +60,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.d(TAG,"onMapReady")
         map = googleMap
 
+
         // Move camera to received location
         val cameraPosition =
             CameraUpdateFactory.newLatLngZoom(viewModel.currentLatLng, DEFAULT_ZOOM)
@@ -66,9 +68,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // Add marker with information (optional)
         val marker = MarkerOptions().position(viewModel.currentLatLng)
-        marker.title("You were here at ${viewModel.currentLocInfo}")
-
+        marker.visible(true)
+        marker.title(viewModel.currentLocInfo)
+        map.setInfoWindowAdapter(CustomMapInfoAdapter(requireContext()))
         map.addMarker(marker)
+
     }
 
     private fun animateToLocations() {
@@ -76,6 +80,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         fun animateNext() {
             if (index < viewModel.locationHistory.size) {
                 val location = viewModel.locationHistory[index]
+                viewModel.currentLocInfo = "${location.user},\nYou were here on\n ${location.time}"
                 val nextLatLng = LatLng(
                     location.latitude,
                     location.longitude
@@ -83,6 +88,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 map.uiSettings.setAllGesturesEnabled(false)
                 map.clear()
                 val marker = MarkerOptions().position(nextLatLng)
+                marker.title(viewModel.currentLocInfo)
                 map.addMarker(marker)
                 map.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(nextLatLng, DEFAULT_ZOOM),
@@ -97,11 +103,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                 }, CAMERA_ANIMATION_DELAY.toLong())
                             }
                         }
-
                         override fun onCancel() {
                             // Handle cancellation if needed
                         }
                     })
+            }else{
+                stopPlayback()
             }
         }
         animateNext()
@@ -114,17 +121,25 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun setBtnListeners() {
         playButton.setOnClickListener {
             if (playButton.text == resources.getString(R.string.btn_text_map_play)) {
-                viewModel.updateLocationHistory()
-                viewModel.isPlayingHistory = true
-                animateToLocations()
-                playButton.text = resources.getString(R.string.btn_text_map_stop)
-                Toast.makeText(context, "Playback started", Toast.LENGTH_SHORT).show()
+                startPlayback()
             } else {
-                playButton.text = resources.getString(R.string.btn_text_map_play)
-                viewModel.isPlayingHistory = false
-                Toast.makeText(context, "Playback stopped", Toast.LENGTH_SHORT).show()
+                stopPlayback()
             }
         }
+    }
+
+    private fun startPlayback(){
+        viewModel.updateLocationHistory()
+        viewModel.isPlayingHistory = true
+        animateToLocations()
+        playButton.text = resources.getString(R.string.btn_text_map_stop)
+        Toast.makeText(context, "Playback started", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun stopPlayback(){
+        playButton.text = resources.getString(R.string.btn_text_map_play)
+        viewModel.isPlayingHistory = false
+        Toast.makeText(context, "Playback stopped", Toast.LENGTH_SHORT).show()
     }
 
 

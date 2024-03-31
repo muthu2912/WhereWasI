@@ -1,6 +1,7 @@
 package com.smk.wherewasi.view.activity
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
+import com.mikepenz.materialdrawer.model.interfaces.iconDrawable
 import com.mikepenz.materialdrawer.model.interfaces.nameRes
 import com.mikepenz.materialdrawer.widget.AccountHeaderView
 import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView
@@ -87,14 +89,27 @@ class DrawerActivity : AppCompatActivity() {
 
     private fun setDefaultFragment() {
         val fragment = PlacesVisitedFragment()
+
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_container, fragment)
             .commit()
     }
 
+    private fun startLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        finish()
+    }
+
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         actionBarDrawerToggle.syncState()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopService(serviceIntent)
     }
 
     private fun initDrawerViews() {
@@ -113,37 +128,47 @@ class DrawerActivity : AppCompatActivity() {
         // actionBarDrawerToggle.syncState()
     }
 
-    private fun initDrawerHeader(savedInstanceState: Bundle?){
+    private fun initDrawerHeader(savedInstanceState: Bundle?) {
         headerView = AccountHeaderView(this).apply {
+            val profiles = viewModel.iProfiles
+
             attachToSliderView(slider)
-            val profiles = viewModel.getProfiles()
             for (i in profiles.indices) {
                 addProfile(profiles[i], i)
             }
+
             withSavedInstance(savedInstanceState)
-            onAccountHeaderListener = {view, profile, current ->
+            onAccountHeaderListener = { _, profile, _ ->
                 profile.identifier
                 MyRealm.deleteLoggedInUser()
                 viewModel.setLoggedInUser(profile.identifier.toInt())
                 setDefaultFragment()
-                Log.d("Drawer Activity","${profile.name}")
+                Log.d("Drawer Activity", "${profile.name}")
                 false
             }
+            setActiveProfile(viewModel.currentUserIndex, false)
         }
+
     }
 
-
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initDrawerItems(savedInstanceState: Bundle?) {
         slider.apply {
-            PrimaryDrawerItem().apply { nameRes = R.string.nav_logout; identifier = 1 }
-            onDrawerItemClickListener = { view, drawerItem, _ ->
+
+            itemAdapter.add(
+                PrimaryDrawerItem().apply {
+                    nameRes = R.string.nav_logout; iconDrawable =
+                    getDrawable(R.drawable.ic_logout); identifier = 1
+                }
+            )
+            onDrawerItemClickListener = { _, drawerItem, _ ->
                 if (drawerItem.identifier == 1L) {
-                    //TODO: move to loginpage
+                    MyRealm.deleteLoggedInUser()
+                    startLoginActivity()
                 }
                 false
             }
             setSavedInstance(savedInstanceState)
-
         }
     }
 

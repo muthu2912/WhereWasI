@@ -18,26 +18,31 @@ import kotlinx.coroutines.launch
 
 class DrawerViewModel : ViewModel() {
     private val realm = MyRealm.realm
-    private var registeredUsers: List<User>
+    private lateinit var registeredUsers: List<User>
+    lateinit var iProfiles: List<IProfile>
+    var currentUserIndex: Long = 0
 
     init{
-        registeredUsers = getRegisteredUsers()
+        getRegisteredUsers()
+        setProfiles()
     }
-    fun getProfiles(): List<IProfile> {
+    private fun setProfiles() {
         val profiles = mutableListOf<IProfile>()
+        val loggedInUser = MyRealm.getLoggedInUser()
         for (i in registeredUsers.indices) {
+            val uname = registeredUsers[i].userName
+            if (loggedInUser.equals(uname)) currentUserIndex = i.toLong()
             val profile = ProfileDrawerItem().apply {
-                val uname = registeredUsers[i].userName
                 nameText = uname; descriptionText =
                 "$uname@gmail.com"; iconRes = R.drawable.profile; identifier = i.toLong()
             }
             profiles.add(profile)
         }
-        return profiles
+        iProfiles = profiles
     }
 
-    private fun getRegisteredUsers(): List<User> {
-        return realm.query<User>().find()
+    private fun getRegisteredUsers() {
+        registeredUsers =  realm.query<User>().find()
     }
 
     fun setLoggedInUser(currentUserIdentifier: Int) {

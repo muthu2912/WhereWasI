@@ -38,11 +38,15 @@ class CardLocationInfoAdapter(private val listener: Listener, private val locati
         cardView.setOnClickListener {
             listener.onClick(position)
         }
-        val latLng =
-            "Lat: ${locationHistory[position].latitude}, Lon: ${locationHistory[position].longitude} \n" +
-                    "@${locationHistory[position].time} | ${locationHistory[position].user}"
-        cardView.findViewById<TextView>(R.id.info_loc_text).text = latLng
+        val userText = "User: ${locationHistory[position].user}"
+        val lat = "Latitude: ${locationHistory[position].latitude}"
+        val lon = "Longiitude: ${locationHistory[position].longitude}"
+        val time = "Timestamp: ${locationHistory[position].time}"
 
+        cardView.findViewById<TextView>(R.id.info_loc_user_info).text = userText
+        cardView.findViewById<TextView>(R.id.info_loc_lat).text = lat
+        cardView.findViewById<TextView>(R.id.info_loc_lon).text = lon
+        cardView.findViewById<TextView>(R.id.info_loc_time).text = time
 
     }
 }
