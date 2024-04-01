@@ -42,9 +42,11 @@ class LocationForegroundService : Service() {
     override fun onCreate() {
         super.onCreate()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        locationRequest =LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY,
-            DEFAULT_LOCATION_UPDATE_INTERVAL).build()
-            //LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000).build()
+        locationRequest = LocationRequest.Builder(
+            Priority.PRIORITY_BALANCED_POWER_ACCURACY,
+            DEFAULT_LOCATION_UPDATE_INTERVAL
+        ).build()
+        //LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000).build()
         locationCallback = object : LocationCallback() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onLocationResult(locationResult: LocationResult) {
@@ -146,6 +148,6 @@ class LocationForegroundService : Service() {
         private const val FOREGROUND_SERVICE_ID = 101
         private const val CHANNEL_ID = "LocationForegroundServiceChannel"
         private const val ACTION_STOP_FOREGROUND_SERVICE = "stopForegroundService"
-        private const val DEFAULT_LOCATION_UPDATE_INTERVAL = 5000L
+        private const val DEFAULT_LOCATION_UPDATE_INTERVAL = 15 * 60 * 1000L
     }
 }
