@@ -61,7 +61,7 @@ class LocationForegroundService : Service() {
 
                             currentUser = MyRealm.getCurrentUser().toString()
                             user = currentUser
-                            //Making change to locations to simulate movement
+                            //TODO: Making slight change to locations to simulate movement, remove after tesing
                             longitude = location.longitude + Math.random() * 0.001
                             latitude = location.latitude + Math.random() * 0.001
                             time = formattedTime
